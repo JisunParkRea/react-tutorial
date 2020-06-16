@@ -3,26 +3,37 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 class Square extends React.Component {
-  // sub class 생성자 정의
-  constructor(props) {
-    super(props); // 항상 super 메서드 명시
-    this.state = {
-      value: null,
-    };
-  }
+  // constructor 삭제
 
     render() {
       return (
-        <button className="square" onClick={() => this.setState({value: 'X'})}>
-          {this.state.value}
+        <button className="square" onClick={() => this.props.onClick()}>
+          {this.props.value}
         </button>
       ); // square 클릭시 X값으로 바뀌게하기
     }
   }
   
   class Board extends React.Component {
+    // 생성자 추가
+    constructor(props) {
+      super(props);
+      this.state = {
+        squares: Array(9).fill(null)
+      };
+    }
+
+    handleClick(i) {
+      const squares = this.state.squares.slice();
+      squares[i] = 'X';
+      this.setState({squares: squares});
+    }
+
     renderSquare(i) {
-      return <Square value={i} />; // value값을 전달받을 수 있게
+      return (
+        // value값을 squares의 state값으로 전달받고 onClick 정의
+        <Square value={this.state.squares[i]} onClick={() => this.handleClick(i)} />
+      );
     }
   
     render() {
